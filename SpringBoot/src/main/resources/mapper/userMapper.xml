@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.devan.board.model.dao.UserDao">
+  	<resultMap type="user" id="userMap">
+  		<result column="join_date" property="joinDate"/>
+  	</resultMap>
+  	
+  	<insert id="insertUser" parameterType="user">
+  		INSERT INTO user VALUES
+  		(0, #{userId}, #{password}, #{userName}, now())
+  	</insert>
+  	<update id="updateUser" parameterType="user">
+  		UPDATE user 
+  		   SET password = #{password},
+	  		   userName = #{userName},
+  			   modi_date = now();
+  		 WHERE seq = #{seq}
+  	</update>
+  	
+  	<delete id="deleteBoard" parameterType="int">
+  		DELETE FROM user WHERE id = #{seq}
+  	</delete>
+  	
+  	<select id="selectOne" resultMap="userMap" parameterType="int">
+  		SELECT seq, userid, password, username, 
+	  		   date_format(join_date, '%Y-%m-%d %H:%i:%s') as join_date
+  		  FROM user
+  		 WHERE seq = #{seq}
+  	</select>  	
+  	
+  	<select id="selectList" resultMap="userMap" >
+  		SELECT seq, userid, password, username, 
+	  		   date_format(join_date, '%Y-%m-%d %H:%i:%s') as join_date
+  		  FROM user  		
+  	</select>
+  </mapper>

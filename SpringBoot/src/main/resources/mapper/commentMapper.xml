@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.devan.board.model.dao.CommentDao">
+	<resultMap type="comment" id="commentMap">
+  		<result column="board_no" property="boardNo"/>
+  		<result column="reg_date" property="regDate"/>
+  		<result column="modi_date" property="modiDate"/>
+	</resultMap>
+  	
+	<insert id="insertComment" parameterType="comment">
+  		INSERT INTO comment (board_no, writer, content)
+  		VALUES (#{boardNo}, #{writer}, #{content})
+	</insert>
+  	
+	<update id="updateComment" parameterType="comment">
+  		UPDATE comment 
+  		   SET content = #{content},
+  			   modi_date = now();
+  		 WHERE no = #{no}
+	</update>
+  	
+	<delete id="deleteComment" parameterType="int">
+  		DELETE FROM comment WHERE no = #{no}
+	</delete>
+  	
+	<select id="selectList" resultMap="commentMap" parameterType="java.util.HashMap">
+  		SELECT no, board_no, writer, content, view_cnt, 
+	  		   date_format(reg_date, '%Y-%m-%d %H:%i:%s') as reg_date,
+	  		   date_format(modi_date, '%Y-%m-%d %H:%i:%s') as modi_date
+  		  FROM comment
+  		<if test="mode == 1">
+  			WHERE board_no = #{boardNo}
+  		</if>
+  		<if test="mode == 2">
+  			WHERE writer = #{writer}
+  		</if>
+	</select>
+</mapper>

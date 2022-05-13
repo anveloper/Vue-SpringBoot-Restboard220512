@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.devan.board.model.dao.BoardDao">
+  	<resultMap type="board" id="boardMap">
+  		<result column="view_cnt" property="viewCnt"/>
+  		<result column="reg_date" property="regDate"/>
+  		<result column="modi_date" property="modiDate"/>
+  	</resultMap>
+  	
+  	<insert id="insertBoard" parameterType="board">
+  		INSERT INTO board (writer, title, content) 
+  		VALUES (#{writer}, #{title}, #{content})
+  	</insert>
+  	<update id="updateBoard" parameterType="board">
+  		UPDATE board 
+  		   SET 
+	  		   title = #{title},
+	  		   writer = #{writer},
+	  		   content = #{content},
+  			   modi_date = now()
+  		 WHERE no = #{no}
+  	</update>
+  	<update id="upViewCnt" parameterType="int">
+  		UPDATE board 
+  		   SET view_cnt = view_cnt + 1
+  		 WHERE no = #{no}
+  	</update>
+  	
+  	<delete id="deleteBoard" parameterType="int">
+  		DELETE FROM board WHERE no = #{no}
+  	</delete>
+  	
+  	<select id="selectOne" resultMap="boardMap" parameterType="int">
+  		SELECT no, title, writer, content, view_cnt, 
+	  		   date_format(reg_date, '%Y-%m-%d %H:%i:%s') as reg_date,
+	  		   date_format(modi_date, '%Y-%m-%d %H:%i:%s') as modi_date
+  		  FROM board
+  		 WHERE no = #{no}
+  	</select>
+  	
+  	
+  	<select id="selectList" resultMap="boardMap" parameterType="java.util.HashMap">
+  		SELECT no, title, writer, content, view_cnt, 
+	  		   date_format(reg_date, '%Y-%m-%d %H:%i:%s') as reg_date,
+	  		   date_format(modi_date, '%Y-%m-%d %H:%i:%s') as modi_date
+  		  FROM board
+  		<if test="mode == 1">
+  			WHERE title LIKE CONCAT('%', #{key}, '%')
+  		</if>
+  		<if test="mode == 2">
+  			WHERE content LIKE '%${key}%'
+  		</if>
+  		<if test="mode == 3">
+  			WHERE title LIKE CONCAT('%', #{key}, '%')
+  			   OR content LIKE '%${key}%'
+  		</if>
+  	</select>
+  </mapper>
