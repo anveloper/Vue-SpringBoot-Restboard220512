@@ -2,8 +2,8 @@ HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
-**/src/test/
-.properties
+/SpringBoot/src/test/java/com/devan/board/SpringBootRestBoard220512ApplicationTests.java
+/SpringBoot/src/main/resources/application.properties
 
 ### STS ###
 .apt_generated
