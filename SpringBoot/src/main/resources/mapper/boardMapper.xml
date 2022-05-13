@@ -56,5 +56,6 @@
   			WHERE title LIKE CONCAT('%', #{key}, '%')
   			   OR content LIKE '%${key}%'
   		</if>
+  		 ORDER BY no DESC
   	</select>
   </mapper>

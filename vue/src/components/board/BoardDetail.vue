@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3>게시글 상세보기</h3>
-    <fieldset class="text-start">
+    <fieldset>
       <label for="no">글 번호</label>
       <input readonly type="text" id="no" v-model="board.no" /><br />
       <label for="title">제목</label>
@@ -22,36 +22,28 @@
       ></textarea>
 
       <router-link class="btn" to="/board">목록</router-link>
-      <router-link class="btn" :to="`/board/update/${board.no}`">수정</router-link>
-      <router-link class="btn" :to="`/board/delete/${board.no}`">삭제</router-link>
+      <router-link class="btn" :to="`/board/${board.no}`" method="PUT">수정</router-link>
+      <router-link class="btn" :to="`/board/${board.no}`" method="DELETE">삭제</router-link>
     </fieldset>
   </div>
 </template>
 
 <script>
-import apiBoard from "@/api/board.js";
+import { mapState } from "vuex";
 
 export default {
   name: "BoardDetail",
-  props: {
-    no: String,
-  },
+
   data() {
-    return {
-      board: Object,
-    };
+    return {};
   },
-  methods:{
+  computed: {
+    ...mapState(["board"]),
   },
-  mounted() {
+  created() {
     const pathName = new URL(document.location).pathname.split("/");
-    const no = pathName[pathName.length - 1];
-    apiBoard
-      .getBoard(no)
-      .then((res) => {
-        (this.board = res.data), console.log(res.data);
-      })
-      .catch((err) => console.log(err));
+    const id = pathName[pathName.length - 1];
+    this.$store.dispatch("getBoard", id);
   },
 };
 </script>

@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,20 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.devan.board.model.dto.Board;
 import com.devan.board.model.service.BoardService;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping("/board")
 public class ApiBoardController {
 	@Autowired
 	private BoardService boardService;
 
-	@GetMapping("/")
+	@GetMapping("")
 	public ResponseEntity<List<Board>> list(
-			@RequestParam(defaultValue = "1") String page,
-			@RequestParam(defaultValue = "") String mode,
+			@RequestParam(defaultValue = "") String mode, 
 			@RequestParam(defaultValue = "") String key) {
-		HashMap<String, String> params = new HashMap<String, String>();		
-		params.put("page", page);
+		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("mode", mode);
 		params.put("key", key);
 		return new ResponseEntity<List<Board>>(boardService.getBoardList(params), HttpStatus.OK);
@@ -47,6 +43,7 @@ public class ApiBoardController {
 
 	@PostMapping("/")
 	public ResponseEntity<Board> insert(@RequestBody Board board) {
+		System.out.println(board);
 		boardService.writeBoard(board);
 		return new ResponseEntity<Board>(boardService.getBoard(board.getNo()), HttpStatus.CREATED);
 	}
