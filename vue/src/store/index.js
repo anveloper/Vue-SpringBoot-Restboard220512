@@ -10,7 +10,9 @@ export default new Vuex.Store({
     rootPath: "http://localhost:8888/api/",
     boards: [],
     board: {},
-    page: 1
+    page: 1,
+    mode: 1,
+    key: ''
   },
   getters: {
   },
@@ -18,6 +20,11 @@ export default new Vuex.Store({
     GET_BOARDS(state, payload) {
       state.boards = payload;
     },
+    SET_MODE_KEY(state, payload) {
+      state.mode = payload.mode;
+      state.key = payload.key;
+    }
+    ,
     GET_BOARD(state, payload) {
       state.board = payload
     },
@@ -27,7 +34,9 @@ export default new Vuex.Store({
   },
   actions: {
     getBoards({ commit }, payload) {
-
+      this.state.page = 1;
+      if (payload.key)
+        commit('SET_MODE_KEY', payload)
       apiBoard
         .getBoardList(payload)
         .then((res) => {

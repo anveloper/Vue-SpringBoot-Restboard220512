@@ -84,7 +84,6 @@ export default {
   },
   methods: {
     search() {
-      this.$store.state.page = 1;
       const payload = {
         mode: this.mode,
         key: this.key,
